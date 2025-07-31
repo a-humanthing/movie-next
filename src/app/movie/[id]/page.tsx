@@ -30,12 +30,12 @@ export default function MovieDetailsPage() {
       <img
         src={movie.posterUrl}
         alt={movie.title}
-        className="w-full md:w-96 h-96 object-cover rounded-lg bg-card-bg"
+        className="w-full aspect-[3/4] object-cover rounded-lg bg-card-bg"
       />
       <div className="flex flex-col gap-8">
         <h1 className="font-semibold text-heading-three">{movie.title}</h1>
         <div className="text-body-large text-white/70">{movie.publishingYear}</div>
-        <div className="flex gap-4 mt-8">
+        <div className="flex gap-4 mt-2 md:mt-8">
           <button
             className="bg-primary text-white px-8 py-3 rounded font-bold w-max"
             onClick={() => router.push("/")}
