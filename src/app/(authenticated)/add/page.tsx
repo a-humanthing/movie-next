@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { HeadingOne } from "../components/Typography";
+import { HeadingOne } from "@/app/components/Typography";
 import { useCreateMovie } from "@/hooks/useMovies";
-import MovieForm from "../components/MovieForm";
+import MovieForm from "@/app/components/MovieForm";
 
 export default function AddMoviePage() {
   const router = useRouter();

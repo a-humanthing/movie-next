@@ -24,6 +24,7 @@ export function useMovies(params?: PaginationParams) {
     queryFn: () => apiClient.getMovies(params),
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+    enabled: apiClient.isAuthenticated(), // Only run if authenticated
   });
 }
 
@@ -32,7 +33,7 @@ export function useMovie(id: string) {
   return useQuery({
     queryKey: movieKeys.detail(id),
     queryFn: () => apiClient.getMovie(id),
-    enabled: !!id,
+    enabled: !!id && apiClient.isAuthenticated(), // Only run if authenticated and id exists
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
   });

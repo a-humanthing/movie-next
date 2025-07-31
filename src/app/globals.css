@@ -464,6 +464,8 @@ h3 {
   padding: 10px 12px;
   outline: none;
   font-size: 16px;
+  border: none;
+  transition: all 0.2s ease;
 }
 
 @media (min-width: 768px) {
@@ -482,6 +484,47 @@ h3 {
 
 .input-field::placeholder {
   color: rgba(255, 255, 255, 0.6);
+}
+
+.input-field:focus {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* Custom checkbox styles */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary);
 }
 
 /* Card styles */

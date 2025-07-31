@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import {
   AuthResponseDto,
   LoginDto,
@@ -23,6 +23,15 @@ import {
 class ApiClient {
   private client: AxiosInstance;
   private baseURL: string;
+  private _isLoggingOut: boolean = false;
+  
+  get isLoggingOut(): boolean {
+    return this._isLoggingOut;
+  }
+  
+  set isLoggingOut(value: boolean) {
+    this._isLoggingOut = value;
+  }
 
   constructor() {
     this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -56,7 +65,10 @@ class ApiClient {
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        // Don't attempt refresh for logout endpoint or if already retried
+        if (error.response?.status === 401 && 
+            !originalRequest._retry && 
+            !originalRequest.url?.includes('/auth/logout')) {
           originalRequest._retry = true;
 
           try {
@@ -97,7 +109,7 @@ class ApiClient {
     }
   }
 
-  private clearAuth(): void {
+  clearAuth(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
@@ -150,9 +162,14 @@ class ApiClient {
   }
 
   async logout(): Promise<LogoutResponseDto> {
-    const response = await this.client.post<LogoutResponseDto>('/auth/logout');
-    this.clearAuth();
-    return response.data;
+    this._isLoggingOut = true;
+    try {
+      const response = await this.client.post<LogoutResponseDto>('/auth/logout');
+      this.clearAuth();
+      return response.data;
+    } finally {
+      this._isLoggingOut = false;
+    }
   }
 
   async getProfile(): Promise<UserProfileDto> {
@@ -211,7 +228,7 @@ class ApiClient {
 
   // Utility methods
   isAuthenticated(): boolean {
-    return !!this.getAccessToken();
+    return !this._isLoggingOut && !!this.getAccessToken();
   }
 
   getUser(): any {

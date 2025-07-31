@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { HeadingOne } from "../../../components/Typography";
+import { HeadingOne } from "@/app/components/Typography";
 import { useMovie, useUpdateMovie } from "@/hooks/useMovies";
-import MovieForm from "../../../components/MovieForm";
+import MovieForm from "@/app/components/MovieForm";
 
 export default function EditMoviePage() {
   const params = useParams();
