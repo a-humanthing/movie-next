@@ -1,12 +1,19 @@
 {
   "name": "next-movie",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "A modern movie management application built with Next.js, React Query, and TypeScript",
+  "author": "Your Name",
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.83.1",
@@ -26,5 +33,17 @@
     "eslint-config-next": "15.4.5",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "movie-app",
+    "react-query",
+    "tailwindcss"
+  ]
 }

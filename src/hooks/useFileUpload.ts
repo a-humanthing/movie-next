@@ -13,7 +13,8 @@ export function useGetSignedUrl() {
   return useMutation({
     mutationFn: (fileInfo: GetSignedUrlDto) => apiClient.getSignedUrl(fileInfo),
     onError: (error) => {
-      console.error('Error getting signed URL:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -23,7 +24,8 @@ export function useGetUploadSignature() {
   return useMutation({
     mutationFn: (fileInfo: GetUploadSignatureDto) => apiClient.getUploadSignature(fileInfo),
     onError: (error) => {
-      console.error('Error getting upload signature:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -33,7 +35,8 @@ export function useDeleteFile() {
   return useMutation({
     mutationFn: (key: string) => apiClient.deleteFile(key),
     onError: (error) => {
-      console.error('Error deleting file:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -49,8 +52,7 @@ export async function uploadFileToS3(signedUrl: string, file: File): Promise<voi
       },
     });
   } catch (error) {
-    console.error('Error uploading file to S3:', error);
-    throw error;
+    throw new Error('Failed to upload file to S3');
   }
 }
 
@@ -86,7 +88,6 @@ export async function uploadToCloudinary(
     const result = await response.json();
     return result.secure_url;
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
     throw new Error('Failed to upload image to Cloudinary');
   }
 } 

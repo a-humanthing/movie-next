@@ -50,7 +50,8 @@ export function useLogin() {
       queryClient.setQueryData(authKeys.profile, data.user);
     },
     onError: (error) => {
-      console.error('Login error:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -83,7 +84,6 @@ export function useLogout() {
       router.push('/login');
     },
     onError: (error) => {
-      console.error('Logout error:', error);
       // Even if logout fails on server, clear local data and redirect
       apiClient.clearAuth();
       apiClient.isLoggingOut = false; // Reset logout flag

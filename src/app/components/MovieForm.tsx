@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGetUploadSignature, uploadToCloudinary } from "@/hooks/useFileUpload";
+import { useToast } from "@/components/Toast";
 
 interface MovieFormProps {
   mode: "add" | "edit";
@@ -36,8 +37,10 @@ export default function MovieForm({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isImageChanged, setIsImageChanged] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const getUploadSignatureMutation = useGetUploadSignature();
+  const { showToast } = useToast();
 
   // Pre-populate form with existing movie data for edit mode
   useEffect(() => {
@@ -51,17 +54,59 @@ export default function MovieForm({
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select a valid image file', 'error');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Image size must be less than 5MB', 'error');
+        return;
+      }
+
       setSelectedFile(file);
       setImagePreview(URL.createObjectURL(file));
       setIsImageChanged(true);
+      setValidationError(null);
     }
+  }
+
+  function validateForm(): boolean {
+    if (!title.trim()) {
+      setValidationError('Title is required');
+      showToast('Title is required', 'error');
+      return false;
+    }
+
+    if (!year.trim()) {
+      setValidationError('Publishing year is required');
+      showToast('Publishing year is required', 'error');
+      return false;
+    }
+
+    const yearNum = parseInt(year);
+    if (isNaN(yearNum) || yearNum < 1888 || yearNum > new Date().getFullYear() + 1) {
+      setValidationError('Please enter a valid year between 1888 and next year');
+      showToast('Please enter a valid year between 1888 and next year', 'error');
+      return false;
+    }
+
+    if (mode === "add" && !selectedFile) {
+      setValidationError('Please select an image');
+      showToast('Please select an image', 'error');
+      return false;
+    }
+
+    setValidationError(null);
+    return true;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     
-    if (mode === "add" && !selectedFile) {
-      alert("Please select an image");
+    if (!validateForm()) {
       return;
     }
 
@@ -82,13 +127,15 @@ export default function MovieForm({
 
       // Submit the form data
       await onSubmit({
-        title,
+        title: title.trim(),
         publishingYear: parseInt(year),
         posterUrl: imageUrl,
       });
+
+      showToast(`Movie ${mode === "add" ? "created" : "updated"} successfully!`, 'success');
     } catch (error) {
-      console.error(`Error ${mode === "add" ? "creating" : "updating"} movie:`, error);
-      alert(`Failed to ${mode === "add" ? "create" : "update"} movie. Please try again.`);
+      const errorMessage = error instanceof Error ? error.message : `Failed to ${mode === "add" ? "create" : "update"} movie`;
+      showToast(errorMessage, 'error');
     }
   }
 
@@ -117,26 +164,43 @@ export default function MovieForm({
         </label>
       </div>
       <div className="flex-1 flex flex-col gap-6 w-full md:max-w-[400px] mx-auto">
-        <input
-          className="input-field"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <input
-          className="input-field w-full md:w-[60%]"
-          placeholder="Publishing year"
-          type="number"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          required
-        />
+        <div>
+          <input
+            className={`input-field ${validationError && !title.trim() ? 'border-red-500' : ''}`}
+            placeholder="Title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (validationError) setValidationError(null);
+            }}
+            required
+          />
+          {validationError && !title.trim() && (
+            <p className="text-red-500 text-sm mt-1">{validationError}</p>
+          )}
+        </div>
+        <div>
+          <input
+            className={`input-field w-full md:w-[60%] ${validationError && !year.trim() ? 'border-red-500' : ''}`}
+            placeholder="Publishing year"
+            type="number"
+            value={year}
+            onChange={(e) => {
+              setYear(e.target.value);
+              if (validationError) setValidationError(null);
+            }}
+            required
+          />
+          {validationError && !year.trim() && (
+            <p className="text-red-500 text-sm mt-1">{validationError}</p>
+          )}
+        </div>
         <div className="flex justify-between gap-6 mt-4">
           <button
             type="button"
             className="btn-secondary"
             onClick={onCancel}
+            disabled={isFormLoading}
           >
             Cancel
           </button>

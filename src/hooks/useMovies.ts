@@ -50,7 +50,8 @@ export function useCreateMovie() {
       queryClient.invalidateQueries({ queryKey: movieKeys.lists() });
     },
     onError: (error) => {
-      console.error('Error creating movie:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -72,7 +73,8 @@ export function useUpdateMovie() {
       queryClient.invalidateQueries({ queryKey: movieKeys.lists() });
     },
     onError: (error) => {
-      console.error('Error updating movie:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 }
@@ -90,7 +92,8 @@ export function useDeleteMovie() {
       queryClient.invalidateQueries({ queryKey: movieKeys.lists() });
     },
     onError: (error) => {
-      console.error('Error deleting movie:', error);
+      // Error handling is managed by the component using this hook
+      throw error;
     },
   });
 } 
