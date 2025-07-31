@@ -96,6 +96,19 @@ export interface DeleteFileResponseDto {
   message: string;
 }
 
+// Cloudinary Upload Types
+export interface UploadSignatureResponse {
+  signature: string;
+  timestamp: number;
+  cloudName: string;
+  folder: string;
+}
+
+export interface GetUploadSignatureDto {
+  fileName: string;
+  fileType: string;
+}
+
 // API Error Types
 export interface ApiError {
   message: string;

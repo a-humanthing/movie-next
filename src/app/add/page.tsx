@@ -2,24 +2,57 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HeadingOne } from "../components/Typography";
+import { useCreateMovie } from "@/hooks/useMovies";
+import { useGetUploadSignature, uploadToCloudinary } from "@/hooks/useFileUpload";
 
 export default function AddMoviePage() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
-  const [image, setImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const router = useRouter();
+
+  const createMovieMutation = useCreateMovie();
+  const getUploadSignatureMutation = useGetUploadSignature();
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Add movie logic here (for demo, just go back)
-    router.push("/");
+    
+    if (!selectedFile) {
+      alert("Please select an image");
+      return;
+    }
+
+    try {
+      // Get upload signature for Cloudinary
+      const uploadSignatureResponse = await getUploadSignatureMutation.mutateAsync({
+        fileName: selectedFile.name,
+        fileType: selectedFile.type,
+      });
+
+      // Upload file to Cloudinary
+      const imageUrl = await uploadToCloudinary(selectedFile, uploadSignatureResponse);
+
+      // Create movie with the uploaded image URL
+      await createMovieMutation.mutateAsync({
+        title,
+        publishingYear: parseInt(year),
+        posterUrl: imageUrl,
+      });
+
+      router.push("/");
+    } catch (error) {
+      console.error("Error creating movie:", error);
+      alert("Failed to create movie. Please try again.");
+    }
   }
 
   return (
@@ -31,8 +64,8 @@ export default function AddMoviePage() {
       >
         <div className="flex-1 flex items-center justify-center">
           <label className="image-upload">
-            {image ? (
-              <img src={image} alt="Preview" className="w-full h-full object-cover rounded-4" />
+            {imagePreview ? (
+              <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
             ) : (
               <span className="image-upload-text">Drop an image here</span>
             )}
@@ -70,8 +103,12 @@ export default function AddMoviePage() {
             <button
               type="submit"
               className="btn-primary"
+              disabled={createMovieMutation.isPending || getUploadSignatureMutation.isPending}
             >
-              Submit
+              {createMovieMutation.isPending || getUploadSignatureMutation.isPending 
+                ? "Creating..." 
+                : "Submit"
+              }
             </button>
           </div>
         </div>

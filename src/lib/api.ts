@@ -16,6 +16,8 @@ import {
   ApiInfoResponseDto,
   PaginationParams,
   ApiError,
+  UploadSignatureResponse,
+  GetUploadSignatureDto,
 } from '@/types/api';
 
 class ApiClient {
@@ -180,7 +182,17 @@ class ApiClient {
     return response.data;
   }
 
-  // File management endpoints
+  async getMovie(id: string): Promise<MovieResponseDto> {
+    const response = await this.client.get<MovieResponseDto>(`/movies/${id}`);
+    return response.data;
+  }
+
+  async deleteMovie(id: string): Promise<{ message: string }> {
+    const response = await this.client.delete<{ message: string }>(`/movies/${id}`);
+    return response.data;
+  }
+
+  // File management endpoints (S3 - deprecated)
   async getSignedUrl(fileInfo: GetSignedUrlDto): Promise<SignedUrlResponseDto> {
     const response = await this.client.post<SignedUrlResponseDto>('/s3/upload-url', fileInfo);
     return response.data;
@@ -188,6 +200,12 @@ class ApiClient {
 
   async deleteFile(key: string): Promise<DeleteFileResponseDto> {
     const response = await this.client.delete<DeleteFileResponseDto>(`/s3/files/${key}`);
+    return response.data;
+  }
+
+  // Cloudinary upload endpoints
+  async getUploadSignature(fileInfo: GetUploadSignatureDto): Promise<UploadSignatureResponse> {
+    const response = await this.client.post<UploadSignatureResponse>('/s3/upload-url', fileInfo);
     return response.data;
   }
 

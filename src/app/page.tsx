@@ -1,58 +1,54 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MovieCard from "./components/MovieCard";
 import Pagination from "./components/Pagination";
 import { useRouter } from "next/navigation";
 import { HeadingOne } from "./components/Typography";
-import { apiClient } from "@/lib/api";
-import { MovieResponseDto, PaginatedMoviesResponseDto } from "@/types/api";
+import { useMovies } from "@/hooks/useMovies";
+import { useLogout } from "@/hooks/useAuth";
 
 export default function HomePage() {
-  const [movies, setMovies] = useState<MovieResponseDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    total: 0,
-    lastPage: 0,
-  });
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  
+  // Use React Query for fetching movies
+  const { data: moviesData, isLoading, error } = useMovies({
+    page: currentPage,
+    limit: 10,
+  });
 
-  const fetchMovies = async (page: number = 1) => {
-    try {
-      setLoading(true);
-      const response: PaginatedMoviesResponseDto = await apiClient.getMovies({
-        page,
-        limit: 10,
-      });
-      
-      setMovies(response.results);
-      setPagination({
-        page: response.page,
-        total: response.total,
-        lastPage: response.lastPage,
-      });
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchMovies();
-  }, []);
+  const logoutMutation = useLogout();
 
   const handlePageChange = (page: number) => {
-    fetchMovies(page);
+    setCurrentPage(page);
   };
 
-  if (loading) {
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-white text-xl">Loading movies...</div>
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-white text-xl">Error loading movies. Please try again.</div>
+      </div>
+    );
+  }
+
+  const movies = moviesData?.results || [];
+  const pagination = {
+    page: moviesData?.page || 1,
+    total: moviesData?.total || 0,
+    lastPage: moviesData?.lastPage || 0,
+  };
 
   return (
     <>
@@ -61,7 +57,7 @@ export default function HomePage() {
           <HeadingOne>My movies</HeadingOne>
           <img src="/images/addButton.svg" className="pl-2 w-8 cursor-pointer" alt="Plus icon" onClick={() => router.push("/add")} />
         </div>
-        <div className="btn-logout">
+        <div className="btn-logout cursor-pointer" onClick={handleLogout}>
           <span id="logout-text" className="text-2xl leading-none">Logout</span>
           <img src="/images/logout.svg" className="pl-2 w-8" alt="Logout" />
         </div>
