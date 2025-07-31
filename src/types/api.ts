@@ -64,11 +64,10 @@ export interface MovieResponseDto {
 }
 
 export interface PaginatedMoviesResponseDto {
-  movies: MovieResponseDto[];
-  page: number;
-  limit: number;
+  results: MovieResponseDto[];
   total: number;
-  totalPages: number;
+  page: number;
+  lastPage: number;
 }
 
 export interface CreateMovieDto {
