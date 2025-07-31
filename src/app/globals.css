@@ -607,7 +607,6 @@ h3 {
 /* Image upload area */
 .image-upload {
   width: 100%;
-  max-width: 300px;
   height: 300px;
   border: 2px dashed rgba(255, 255, 255, 0.3);
   border-radius: 12px;

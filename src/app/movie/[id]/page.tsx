@@ -43,6 +43,12 @@ export default function MovieDetailsPage() {
             Back to list
           </button>
           <button
+            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded font-bold w-max transition-colors"
+            onClick={() => router.push(`/movie/${movieId}/edit`)}
+          >
+            Edit Movie
+          </button>
+          <button
             className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded font-bold w-max transition-colors"
             onClick={() => {
               if (confirm("Are you sure you want to delete this movie?")) {

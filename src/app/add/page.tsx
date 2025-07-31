@@ -77,7 +77,7 @@ export default function AddMoviePage() {
             />
           </label>
         </div>
-        <div className="flex-1 flex flex-col gap-6 max-w-[400px] mx-auto">
+        <div className="flex-1 flex flex-col gap-6 w-full md:max-w-[400px] mx-auto">
           <input
             className="input-field"
             placeholder="Title"
@@ -86,13 +86,14 @@ export default function AddMoviePage() {
             required
           />
           <input
-            className="input-field"
+            className="input-field w-full md:w-[60%]"
             placeholder="Publishing year"
+            type="number"
             value={year}
             onChange={(e) => setYear(e.target.value)}
             required
           />
-          <div className="flex gap-6 mt-4">
+          <div className="flex justify-between gap-6 mt-4">
             <button
               type="button"
               className="btn-secondary"
