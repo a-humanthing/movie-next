@@ -166,7 +166,7 @@ export default function MovieForm({
       <div className="flex-1 flex flex-col gap-6 w-full md:max-w-[400px] mx-auto">
         <div>
           <input
-            className={`input-field ${validationError && !title.trim() ? 'border-red-500' : ''}`}
+            className={`input-field w-full ${validationError && !title.trim() ? 'border-red-500' : ''}`}
             placeholder="Title"
             value={title}
             onChange={(e) => {

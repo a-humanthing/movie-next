@@ -94,12 +94,6 @@ export default function LoginPage() {
             </label>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="text-error body-small text-center">
-              {error}
-            </div>
-          )}
 
           {/* Login Button */}
           <button

@@ -7,6 +7,11 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 export const metadata = {
   title: "Movie App",
   description: "A modern movie management application",
+  icons: {
+    icon: '/movie.png', 
+    apple: '/movie.png',
+  },
+
 };
 
 export default function RootLayout({ children }: PropsWithChildren<{}>) {
