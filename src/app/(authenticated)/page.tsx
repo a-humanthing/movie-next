@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { HeadingOne } from "../components/Typography";
 import { useMovies } from "@/hooks/useMovies";
 import { useLogout } from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,9 +30,7 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-white text-xl">Loading movies...</div>
-      </div>
+      <LoadingSpinner/>
     );
   }
 

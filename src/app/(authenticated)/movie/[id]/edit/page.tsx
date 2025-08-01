@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { HeadingOne } from "@/app/components/Typography";
 import { useMovie, useUpdateMovie } from "@/hooks/useMovies";
 import MovieForm from "@/app/components/MovieForm";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function EditMoviePage() {
   const params = useParams();
@@ -34,9 +35,7 @@ export default function EditMoviePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-white text-xl">Loading movie...</div>
-      </div>
+      <LoadingSpinner name="Movie"/>
     );
   }
 

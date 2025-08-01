@@ -2,6 +2,7 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useMovie, useDeleteMovie } from "@/hooks/useMovies";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function MovieDetailsPage() {
   const params = useParams();
@@ -13,9 +14,7 @@ export default function MovieDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-white text-xl">Loading movie...</div>
-      </div>
+     <LoadingSpinner name="Movie"/>
     );
   }
 
@@ -30,7 +29,7 @@ export default function MovieDetailsPage() {
       <img
         src={movie.posterUrl}
         alt={movie.title}
-        className="w-full aspect-[3/4] object-cover rounded-lg bg-card-bg"
+        className="w-full aspect-[3/4] max-h-[120vh] max-w-[40vh] object-cover rounded-lg bg-card-bg"
       />
       <div className="flex flex-col gap-8">
         <h1 className="font-semibold text-heading-three">{movie.title}</h1>

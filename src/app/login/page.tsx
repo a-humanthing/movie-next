@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLogin } from '@/hooks/useAuth';
 import { apiClient } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,6 +14,7 @@ export default function LoginPage() {
   
   const router = useRouter();
   const loginMutation = useLogin();
+  const { showToast } = useToast();
 
   // Redirect to home if already authenticated
   useEffect(() => {
@@ -20,6 +22,12 @@ export default function LoginPage() {
       router.push('/');
     }
   }, [router]);
+
+  useEffect(()=>{
+    if(error){
+      showToast(error,'error')
+    }
+  },[error])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,12 +43,13 @@ export default function LoginPage() {
       // Redirect to home page after successful login
       router.push('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      let message = err.response?.data?.message || 'Login failed. Please try again.'
+      setError(message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="mt-6 md:mt-4 bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Heading */}
