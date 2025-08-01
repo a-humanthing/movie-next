@@ -26,6 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Log error to monitoring service in production
     if (process.env.NODE_ENV === 'production') {
       // Send to error reporting service
+      console.log('erron',error,errorInfo)
     }
   }
 
@@ -40,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <div className="text-center">
             <h2 className="heading-three text-error mb-4">Something went wrong</h2>
             <p className="body-regular text-opacity-60 mb-6">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We&apos;re sorry, but something unexpected happened. Please try refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}

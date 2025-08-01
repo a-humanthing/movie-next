@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 type Movie = {
@@ -11,7 +12,7 @@ export default function MovieCard({ movie, onClick }: { movie: Movie; onClick?: 
   return (
     <div className="movie-card" onClick={onClick}>
       <div className="movie-card-image">
-        <img
+        <Image
           src={movie.image}
           alt={movie.title}
           className="absolute inset-0 w-full h-full object-cover"

@@ -15,7 +15,6 @@ import {
   HealthCheckResponseDto,
   ApiInfoResponseDto,
   PaginationParams,
-  ApiError,
   UploadSignatureResponse,
   GetUploadSignatureDto,
 } from '@/types/api';

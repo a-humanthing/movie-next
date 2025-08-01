@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
-import { LoginDto, AuthResponseDto, UserProfileDto } from '@/types/api';
+import { LoginDto } from '@/types/api';
 import { useRouter } from 'next/navigation';
 
 // Query keys for authentication
@@ -83,7 +83,7 @@ export function useLogout() {
       // Redirect immediately after successful logout
       router.push('/login');
     },
-    onError: (error) => {
+    onError: () => {
       // Even if logout fails on server, clear local data and redirect
       apiClient.clearAuth();
       apiClient.isLoggingOut = false; // Reset logout flag

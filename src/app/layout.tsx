@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 import QueryProvider from "@/components/providers/QueryProvider";
 import { ToastProvider } from "@/components/Toast";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -14,7 +14,11 @@ export const metadata = {
 
 };
 
-export default function RootLayout({ children }: PropsWithChildren<{}>) {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: PropsWithChildren<LayoutProps>) {
   return (
     <html lang="en">
       <body className="min-h-screen bg-background text-text font-montserrat">

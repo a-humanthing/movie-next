@@ -2,8 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
 import { 
   GetSignedUrlDto, 
-  SignedUrlResponseDto, 
-  DeleteFileResponseDto,
   GetUploadSignatureDto,
   UploadSignatureResponse 
 } from '@/types/api';

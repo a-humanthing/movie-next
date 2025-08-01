@@ -3,6 +3,7 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useMovie, useDeleteMovie } from "@/hooks/useMovies";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Image from "next/image";
 
 export default function MovieDetailsPage() {
   const params = useParams();
@@ -26,7 +27,7 @@ export default function MovieDetailsPage() {
 
   return (
     <div className="flex flex-col md:flex-row gap-16">
-      <img
+      <Image
         src={movie.posterUrl}
         alt={movie.title}
         className="w-full aspect-[3/4] max-h-[120vh] max-w-[40vh] object-cover rounded-lg bg-card-bg"

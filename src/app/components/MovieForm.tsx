@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useGetUploadSignature, uploadToCloudinary } from "@/hooks/useFileUpload";
 import { useToast } from "@/components/Toast";
+import Image from "next/image";
 
 interface MovieFormProps {
   mode: "add" | "edit";
@@ -52,22 +53,23 @@ export default function MovieForm({
     }
   }, [initialData, mode]);
 
-  const validateAndSetImage = (file: File) => {
+  const validateAndSetImage = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
       showToast('Please select a valid image file', 'error');
       return;
     }
-
+  
     if (file.size > 5 * 1024 * 1024) {
       showToast('Image size must be less than 5MB', 'error');
       return;
     }
-
+  
     setSelectedFile(file);
     setImagePreview(URL.createObjectURL(file));
     setIsImageChanged(true);
     setValidationError(null);
-  };
+  }, [showToast, setSelectedFile, setImagePreview, setIsImageChanged, setValidationError]);
+  
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -81,7 +83,7 @@ export default function MovieForm({
 
     const file = e.dataTransfer.files?.[0];
     if (file) validateAndSetImage(file);
-  }, []);
+  }, [validateAndSetImage]);
 
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
@@ -177,7 +179,7 @@ export default function MovieForm({
         onDrop={handleDrop}
       >
         {imagePreview ? (
-          <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
+          <Image src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
         ) : (
           <span className="image-upload-text text-gray-500">Drop an image here or click to select</span>
         )}

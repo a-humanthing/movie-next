@@ -43,7 +43,7 @@ export default function LoginPage() {
       // Redirect to home page after successful login
       router.push('/');
     } catch (err: any) {
-      let message = err.response?.data?.message || 'Login failed. Please try again.'
+      const message = err.response?.data?.message || 'Login failed. Please try again.'
       setError(message);
     }
   };

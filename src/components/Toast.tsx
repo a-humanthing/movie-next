@@ -82,7 +82,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
 
   const showToast = (message: string, type: ToastType, duration?: number) => {
     const id = Math.random().toString(36).substr(2, 9);
-    setToasts(prev => [...prev, { id, message, type, duration }]);
+    setToasts(prev => [
+      ...prev,
+      ...(duration !== undefined
+        ? [{ id, message, type, duration }]
+        : [{ id, message, type }])
+    ]);
   };
 
   const removeToast = (id: string) => {
@@ -98,7 +103,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
             key={toast.id}
             message={toast.message}
             type={toast.type}
-            duration={toast.duration}
+            duration={toast.duration||5000}
             onClose={() => removeToast(toast.id)}
           />
         ))}
