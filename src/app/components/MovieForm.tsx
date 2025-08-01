@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useGetUploadSignature, uploadToCloudinary } from "@/hooks/useFileUpload";
 import { useToast } from "@/components/Toast";
-import Image from "next/image";
 
 interface MovieFormProps {
   mode: "add" | "edit";
@@ -179,7 +178,7 @@ export default function MovieForm({
         onDrop={handleDrop}
       >
         {imagePreview ? (
-          <Image src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
+          <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
         ) : (
           <span className="image-upload-text text-gray-500">Drop an image here or click to select</span>
         )}

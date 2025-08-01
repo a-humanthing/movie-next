@@ -3,7 +3,6 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useMovie, useDeleteMovie } from "@/hooks/useMovies";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Image from "next/image";
 
 export default function MovieDetailsPage() {
   const params = useParams();
@@ -27,7 +26,7 @@ export default function MovieDetailsPage() {
 
   return (
     <div className="flex flex-col md:flex-row gap-16">
-      <Image
+      <img
         src={movie.posterUrl}
         alt={movie.title}
         className="w-full aspect-[3/4] max-h-[120vh] max-w-[40vh] object-cover rounded-lg bg-card-bg"
@@ -40,13 +39,13 @@ export default function MovieDetailsPage() {
             className="bg-primary text-white px-8 py-3 rounded font-bold w-max"
             onClick={() => router.push("/")}
           >
-            Back to list
+            ↩
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded font-bold w-max transition-colors"
             onClick={() => router.push(`/movie/${movieId}/edit`)}
           >
-            Edit Movie
+            ✏️
           </button>
           <button
             className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded font-bold w-max transition-colors"
@@ -61,7 +60,7 @@ export default function MovieDetailsPage() {
             }}
             disabled={deleteMovieMutation.isPending}
           >
-            {deleteMovieMutation.isPending ? "Deleting..." : "Delete Movie"}
+            {deleteMovieMutation.isPending ? "Deleting..." : "🗑️"}
           </button>
         </div>
       </div>

@@ -1,13 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import MovieCard from "../components/MovieCard";
-import Pagination from "../components/Pagination";
+import MovieCard from "./MovieCard";
+import Pagination from "./Pagination";
 import { useRouter } from "next/navigation";
-import { HeadingOne } from "../components/Typography";
+import { HeadingOne } from "./Typography";
 import { useMovies } from "@/hooks/useMovies";
 import { useLogout } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Image from "next/image";
 
 export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,11 +54,11 @@ export default function HomePage() {
       <div className="flex items-center justify-between mb-10 mt-6">
         <div className="flex items-center">
           <HeadingOne>My movies</HeadingOne>
-          <Image src="/images/addButton.svg" className="pl-2 w-8 cursor-pointer" alt="Plus icon" onClick={() => router.push("/add")} />
+          <img src="/images/addButton.svg"  className="pl-2 w-8 cursor-pointer" alt="Plus icon" onClick={() => router.push("/add")} />
         </div>
         <div className="btn-logout cursor-pointer" onClick={handleLogout}>
           <span id="logout-text" className="text-2xl leading-none">Logout</span>
-          <Image src="/images/logout.svg" className="pl-2 w-8" alt="Logout" />
+          <img src="/images/logout.svg" className="pl-2 w-8" alt="Logout" />
         </div>
       </div>
       
@@ -70,7 +69,7 @@ export default function HomePage() {
             onClick={() => router.push("/add")}
             className="flex items-center bg-green-500 hover:bg-green-600 text-black px-6 py-3 rounded-md transition-colors"
           >
-            <Image src="/images/addButton.svg" className="w-6 h-6 mr-2" alt="Add icon" />
+            <img src="/images/addButton.svg" className="w-6 h-6 mr-2" alt="Add icon" />
             Add Movie
           </button>
         </div>

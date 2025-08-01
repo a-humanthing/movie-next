@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import HomePage from './(authenticated)/page';
+import HomePage from './components/HomePage';
 
 export default function RootPage() {
   const [isLoading, setIsLoading] = useState(true);

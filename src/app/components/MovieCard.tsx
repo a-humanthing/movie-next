@@ -15,6 +15,8 @@ export default function MovieCard({ movie, onClick }: { movie: Movie; onClick?: 
         <Image
           src={movie.image}
           alt={movie.title}
+          fill={true}
+          priority={true}
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
