@@ -73,10 +73,10 @@ src/
 
 3. **Set up environment variables**
    ```bash
-   cp env.example .env.local
+   cp env.example .env
    ```
    
-   Update `.env.local` with your configuration:
+   Update `.env` with your configuration:
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:3000
    NEXT_PUBLIC_CLOUDINARY_API_KEY=your_cloudinary_key
@@ -182,12 +182,6 @@ showToast('Movie created successfully!', 'success');
 - **Error Boundaries**: Graceful error handling
 - **Form Validation**: Client-side validation with user feedback
 
-## 📊 Performance Metrics
-
-- **Lighthouse Score**: 90+ across all metrics
-- **Bundle Size**: Optimized with tree shaking
-- **Loading Speed**: Fast initial page loads
-- **Caching**: Efficient React Query caching strategy
 
 ## 🔧 Configuration Files
 
@@ -203,19 +197,3 @@ showToast('Movie created successfully!', 'success');
 - **API Design**: RESTful API with proper error handling
 - **Database Design**: Scalable data models
 - **Caching Strategy**: Multi-level caching approach
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-**Built with ❤️ using Next.js, React Query, and TypeScript**
