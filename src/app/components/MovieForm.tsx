@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useCallback } from "react";
 import { useGetUploadSignature, uploadToCloudinary } from "@/hooks/useFileUpload";
 import { useToast } from "@/components/Toast";
 
@@ -39,6 +38,8 @@ export default function MovieForm({
   const [isImageChanged, setIsImageChanged] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  const [isDragActive, setIsDragActive] = useState(false);
+
   const getUploadSignatureMutation = useGetUploadSignature();
   const { showToast } = useToast();
 
@@ -51,28 +52,46 @@ export default function MovieForm({
     }
   }, [initialData, mode]);
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        showToast('Please select a valid image file', 'error');
-        return;
-      }
-
-      // Validate file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
-        showToast('Image size must be less than 5MB', 'error');
-        return;
-      }
-
-      setSelectedFile(file);
-      setImagePreview(URL.createObjectURL(file));
-      setIsImageChanged(true);
-      setValidationError(null);
+  const validateAndSetImage = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file', 'error');
+      return;
     }
-  }
 
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Image size must be less than 5MB', 'error');
+      return;
+    }
+
+    setSelectedFile(file);
+    setImagePreview(URL.createObjectURL(file));
+    setIsImageChanged(true);
+    setValidationError(null);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) validateAndSetImage(file);
+  };
+
+  const handleDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) validateAndSetImage(file);
+  }, []);
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  };
+
+  const handleDragLeave = () =>{
+     setIsDragActive(false);
+  }
   function validateForm(): boolean {
     if (!title.trim()) {
       setValidationError('Title is required');
@@ -149,20 +168,27 @@ export default function MovieForm({
       onSubmit={handleSubmit}
     >
       <div className="flex-1 flex items-center justify-center">
-        <label className="image-upload">
-          {imagePreview ? (
-            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
-          ) : (
-            <span className="image-upload-text">Drop an image here</span>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-        </label>
-      </div>
+      <label
+        className={`image-upload border-dashed border-2 rounded-lg w-full h-64 flex items-center justify-center cursor-pointer transition-all ${
+          isDragActive ? 'border-blue-500 bg-blue-100' : 'border-gray-300'
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {imagePreview ? (
+          <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-4" />
+        ) : (
+          <span className="image-upload-text text-gray-500">Drop an image here or click to select</span>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+      </label>
+    </div>
       <div className="flex-1 flex flex-col gap-6 w-full md:max-w-[400px] mx-auto">
         <div>
           <input
